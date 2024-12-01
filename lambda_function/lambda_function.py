@@ -4,17 +4,17 @@ import boto3
 dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
 ORDERS_TABLE = "Orders"  # Replace with your DynamoDB table name
 
-sns_client = boto3.client("sns")
+sns_client = boto3.client("sns", region_name='us-east-1')
 SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:764036388996:OrderStatusUpdates"  # Replace with your SNS Topic ARN
 
-import json
-import boto3
+# import json
+# import boto3
 
-dynamodb = boto3.resource("dynamodb")
-ORDERS_TABLE = "Orders"  # Replace with your DynamoDB table name
+# dynamodb = boto3.resource("dynamodb")
+# ORDERS_TABLE = "Orders"  # Replace with your DynamoDB table name
 
-sns_client = boto3.client("sns")
-SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:764036388996:OrderStatusUpdates"  # Replace with your SNS Topic ARN
+# sns_client = boto3.client("sns")
+# SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:764036388996:OrderStatusUpdates"  # Replace with your SNS Topic ARN
 
 def lambda_handler(event, context):
     try:
