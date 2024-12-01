@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Statistics</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Roboto', sans-serif;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .nav-wrapper {
+            background-color: #00796b;
+        }
+        .nav-wrapper a {
+            color: white !important;
+        }
+        .table-container {
+            margin-top: 40px;
+        }
+        table {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .highlight td {
+            background-color: #e3f2fd !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo left">Admin Statistics</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Total Sales</h1>
+        {% if sorted_sales %}
+            <div class="table-container">
+                <table class="highlight centered responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Total Orders</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product_id, total_orders in sorted_sales %}
+                            <tr>
+                                <td>{{ product_id }}</td>
+                                <td>{{ total_orders }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="red-text center-align">No sales data available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

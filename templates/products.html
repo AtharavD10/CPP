@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .product p {
+            font-size: 14px;
+            color: #777;
+        }
+        .product .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 10px 0;
+        }
+        .product button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .product button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Our Products</h1>
+        <div class="products">
+            {% for product in products %}
+            <div class="product">
+                <!-- Display product image -->
+                <img src="{{ product['ImageURL'] }}" alt="{{ product['ProductName'] }}">
+                
+                <!-- Display product name -->
+                <h3>{{ product['ProductName'] }}</h3>
+                
+                <!-- Display product description -->
+                <p>{{ product['Description'] }}</p>
+                
+                <!-- Display product price -->
+                <p class="price">$ {{ product['Price'] }}</p>
+                
+                <!-- Buy Now button -->
+                <button onclick="buyProduct('{{ product['ProductID'] }}')">Buy Now</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        // Function to handle Buy Now button click
+        function buyProduct(productId) {
+            alert("Product purchased: " + productId);
+            // Redirect to a purchase confirmation page or handle the order
+        }
+    </script>
+</body>
+</html>

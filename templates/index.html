@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.8em;
+            position: relative;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            background-color: #333;
+        }
+        .tab {
+            padding: 15px 30px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            flex-grow: 1;
+            transition: background-color 0.3s;
+        }
+        .tab:hover {
+            background-color: #555;
+        }
+        .tab.active {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            width: 70%;
+        }
+        .product {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product h2 {
+            margin: 20px 0;
+            font-size: 1.3em;
+            color: #333;
+        }
+        .product p {
+            color: #777;
+            font-size: 1em;
+        }
+        .product .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin: 15px 0;
+        }
+        .product button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .product button:hover {
+            background-color: #0056b3;
+        }
+        .order-history {
+            width: 100%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .order-history h3 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .order-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .order-history table, .order-history th, .order-history td {
+            border: 1px solid #ddd;
+        }
+        .order-history th, .order-history td {
+            padding: 10px;
+            text-align: left;
+        }
+        .order-history th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to the Product Store</h1>
+        {% if session.username %}
+            <button class="logout-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+        {% endif %}
+    </header>
+    
+    <div class="tabs">
+        <div class="tab active" id="productsTab" onclick="showTab('products')">Products</div>
+        <div class="tab" id="orderHistoryTab" onclick="showTab('orderHistory'); fetchOrderHistory();">Order History</div>
+    </div>
+    
+    <div class="container">
+        <!-- Products Section -->
+        <div id="productsSection" class="products">
+            {% for product in products %}
+                <div class="product">
+                    <img src="{{ product.ImageURL }}" alt="{{ product.ProductName }}">
+                    <h2>{{ product.ProductName }}</h2>
+                    <p>{{ product.Description }}</p>
+                    <p class="price">$ {{ product.Price }}</p>
+                    <button onclick="buyProduct('{{ product.ProductID }}')">Buy Now</button>
+                </div>
+            {% endfor %}
+        </div>
+    <!-- Order History Section -->
+        <div id="orderHistorySection" class="order-history" style="display:none;">
+            <h3>Your Order History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product ID</th>
+                        <th>Status</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">No orders found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+    <script>
+        function showTab(tab) {
+            document.getElementById("productsSection").style.display = "none";
+            document.getElementById("orderHistorySection").style.display = "none";
+        
+            document.getElementById("productsTab").classList.remove("active");
+            document.getElementById("orderHistoryTab").classList.remove("active");
+        
+            if (tab === 'products') {
+                document.getElementById("productsSection").style.display = "grid";
+                document.getElementById("productsTab").classList.add("active");
+            } else if (tab === 'orderHistory') {
+                document.getElementById("orderHistorySection").style.display = "block";
+                document.getElementById("orderHistoryTab").classList.add("active");
+                fetchOrderHistory(); // Fetch order history when this tab is clicked
+            }
+        }
+    
+        function buyProduct(productId) {
+            const userId = "{{ session['username'] }}";  // Or whatever user identifier you use
+    
+            fetch('/buy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Order placed successfully!') {
+                    alert('Your order has been placed successfully!');
+                } else {
+                    alert('Failed to place order. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error placing the order.');
+            });
+        }
+    
+        function fetchOrderHistory() {
+            fetch('/order_history', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#orderHistorySection tbody');
+                tableBody.innerHTML = ''; // Clear existing rows
+            
+                if (data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="4">No orders found.</td></tr>`;
+                    return;
+                }
+            
+                data.forEach(order => {
+                    const row = `
+                        <tr>
+                            <td>${order.OrderID}</td>
+                            <td>${order.ProductID}</td>
+                            <td>${order.OrderStatus}</td>
+                            <td>${order.OrderDate}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching order history:', error);
+                alert('Error fetching order history.');
+            });
+        }
+        
+        // Call this function when the "Order History" tab is shown
+        document.getElementById('orderHistoryTab').addEventListener('click', fetchOrderHistory);
+    </script>
+    
+    </body>
+    </html>

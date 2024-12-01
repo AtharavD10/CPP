@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Account Verification</h2>
+        <form action="/verify" method="POST">
+            <div class="input-group">
+                <label for="verification_code">Enter Verification Code</label>
+                <input type="text" id="verification_code" name="verification_code" required>
+            </div>
+            <div class="button-group">
+                <button type="submit">Verify</button>
+            </div>
+            <div class="links">
+                <a href="/login">Back to Login</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

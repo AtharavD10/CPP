@@ -1,0 +1,33 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table thead {
+    background-color: #212529;
+    color: #fff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}

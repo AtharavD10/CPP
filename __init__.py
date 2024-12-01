@@ -1,0 +1,1 @@
+from .dynamo import create_products_table
