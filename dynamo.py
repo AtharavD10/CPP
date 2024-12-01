@@ -7,7 +7,7 @@ from boto3.dynamodb.conditions import Key
 
 # DynamoDB setup
 dynamodb_client = boto3.client('dynamodb', region_name='us-east-1')
-dynamodb_resource = boto3.resource('dynamodb')
+dynamodb_resource = boto3.resource('dynamodb', region_name='us-east-1')
 
 # Table references
 orders_table = dynamodb_resource.Table('Orders')
