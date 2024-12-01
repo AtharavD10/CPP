@@ -6,7 +6,6 @@ from flask import Blueprint, Flask, jsonify, render_template, request, redirect,
 from dotenv import load_dotenv
 from botocore.exceptions import NoCredentialsError, ClientError
 import os
-from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from cognito import register_user, login_user, forgot_password, verify_user, verify_token
 from boto3.dynamodb.conditions import Key
 from lambda_function.lambda_function import lambda_handler
