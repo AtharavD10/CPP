@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.8-slim-buster as build
+FROM python:3.8-slim-buster
 
 LABEL maintainer="Atharva Deshpande"
 LABEL version="1.0"
