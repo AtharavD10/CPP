@@ -20,9 +20,8 @@ from dynamo import (
     get_all_orders_from_dynamodb
 )
 
-sns_client = boto3.client("sns", region_name="us-east-1")  # Replace with your region
-SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:764036388996:OrderStatusUpdates"  # Replace with your ARN
-
+sns_client = boto3.client("sns", region_name="us-east-1")  
+SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:764036388996:OrderStatusUpdates"  
 admin_routes = Blueprint("admin_routes", __name__)
 
 app = Flask(__name__)
@@ -96,7 +95,7 @@ for product in products:
         description=product["description"],
         price=product["price"],
         quantity=product["quantity"],
-        image_url=product["image_url"]  # Use pre-uploaded S3 URL
+        image_url=product["image_url"]  
     )
 
 print("Initial products added to DynamoDB!")
@@ -112,13 +111,12 @@ def get_products_from_dynamodb():
     
 @app.route('/place_order/<product_id>', methods=['POST'])
 def place_order_route(product_id):
-    # COMMENT: Added functionality to place an order from frontend
     user_id = session.get('username')
     if not user_id:
         flash('Please log in to place an order.', 'warning')
         return redirect(url_for('login'))
 
-    quantity = request.form.get('quantity', 1)  # Default to 1 if not specified
+    quantity = request.form.get('quantity', 1) 
     order_result = place_order(user_id, product_id, int(quantity))
 
     if order_result:
@@ -129,14 +127,14 @@ def place_order_route(product_id):
 
 @app.route('/order_history', methods=['GET'])
 def order_history():
-    # Assuming the user is logged in and you can get the user_id from the session
-    user_id = session.get('username')  # Replace 'username' with your session key
+    
+    user_id = session.get('username') 
 
     if not user_id:
         return jsonify({'message': 'User not logged in'}), 401
 
     try:
-        # Scan the table for all orders and filter by UserID
+        # This scans the table for all orders and filter by UserID
         response = orders_table.scan(
             FilterExpression=Key('UserID').eq(user_id)
         )
@@ -149,7 +147,7 @@ def order_history():
             {
                 'OrderID': order['OrderID'],
                 'ProductID': order['ProductID'],
-                'OrderStatus': order.get('OrderStatus', 'Pending'),  # Default to 'Pending'
+                'OrderStatus': order.get('OrderStatus', 'Pending'),  
                 'OrderDate': order['OrderDate']
             }
             for order in orders
@@ -164,15 +162,12 @@ def order_history():
 @app.route('/buy', methods=['POST'])
 def buy_product():
     try:
-        # Get data from the frontend (product_id and user_id)
+        # Get the data from the frontend (product_id and user_id)
         data = request.get_json()
         product_id = data['product_id']
         user_id = data['user_id']
         
-        # You may fetch product details from DynamoDB if needed for order details
-        #product = get_products_from_dynamodb(product_id)  # Implement this if necessary
-
-        # Generate unique order ID and timestamp
+        # To Generate unique order ID and timestamp
         order_id = str(uuid.uuid4())
         order_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -182,8 +177,8 @@ def buy_product():
                 'OrderID': order_id,
                 'UserID': user_id,
                 'ProductID': product_id,
-                'OrderStatus': 'Pending',  # Can update this later
-                'OrderDate': order_date,  # Replace with actual date if needed
+                'OrderStatus': 'Pending',  
+                'OrderDate': order_date,  
             }
         )
 
@@ -217,7 +212,7 @@ def login():
         password = request.form.get('password')
 
         auth_result = login_user(username, password)
-        if isinstance(auth_result, dict):  # Successful login
+        if isinstance(auth_result, dict):
             session['username'] = username
             session['password'] = password
             flash('Login successful!', 'success')
@@ -302,7 +297,6 @@ def authenticate_user(username, password):
         refresh_token = response['AuthenticationResult']['RefreshToken']
         
         # Store the tokens or perform additional logic as needed
-        # For example, store the id_token in session
         return True  # User authenticated successfully
     except ClientError as e:
         # Handle errors (e.g., incorrect credentials)

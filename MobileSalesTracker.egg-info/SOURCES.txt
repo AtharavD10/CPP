@@ -1,0 +1,6 @@
+README.md
+setup.py
+MobileSalesTracker.egg-info/PKG-INFO
+MobileSalesTracker.egg-info/SOURCES.txt
+MobileSalesTracker.egg-info/dependency_links.txt
+MobileSalesTracker.egg-info/top_level.txt

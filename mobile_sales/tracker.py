@@ -31,7 +31,7 @@ class MobileSalesTracker:
         # Dictionary to count orders per ProductID
         sales_data = {}
 
-        # Define valid statuses for counting orders
+        # Define valid status for counting orders
         valid_statuses = {"Order Confirmed", "Dispatched", "Delivered"}
 
         for order in order_items:
@@ -58,5 +58,5 @@ class MobileSalesTracker:
         Returns a dictionary with ProductID as the key and order count as the value.
         """
         total_orders = {product_id: total for product_id, total in self.sales}
-        print(f"Total sales by product: {total_orders}")  # Debugging print statement
+        print(f"Total sales by product: {total_orders}")  
         return total_orders

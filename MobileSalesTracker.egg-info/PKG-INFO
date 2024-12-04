@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: MobileSalesTracker
+Version: 0.1.0
+Summary: We have created this library to fetch and analyze the order details which is useful for the tracker admin
+Home-page: https://github.com/AtharavD10/CPPLibrary.git
+Author: Atharav Deshpande
+Author-email: atharavd10@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
